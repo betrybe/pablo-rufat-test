@@ -1,4 +1,4 @@
-const { EMAIL_REGEX, ERROR_BAD_REQUEST, ERROR_ONLY_ADMIN } = require("../config/constants");
+const { EMAIL_REGEX, ERROR_BAD_REQUEST, ERROR_ONLY_ADMIN } = require("../utils/constants");
 const { UserService } = require("../service/index");
 const { Roles } = require("../utils/interfaces");
 

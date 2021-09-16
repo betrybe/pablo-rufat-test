@@ -1,6 +1,16 @@
 const app = require("./app");
-const { PORT } = require("./config/constants");
+const { PORT, MONGO_DB_URL, CONNECTION_ERROR, CONNECTION_MESSAGE } = require("./utils/constants");
+const mongoose = require("mongoose");
 
 const port = PORT || 3000;
 
-app.listen(port, () => console.log(`conectado na porta ${port}`));
+console.log(CONNECTION_MESSAGE);
+
+mongoose.connect(MONGO_DB_URL)
+    .then( () => {
+        app.listen(port, () => console.log(`conectado na porta ${port}`));
+    })
+    .catch(error => {
+        console.error(CONNECTION_ERROR, error);
+        process.exit(1);
+    });

@@ -3,6 +3,9 @@ const DB_NAME = "Cookmaster";
 const JWT_SECRET = "The_Ultra_Secret_1991";
 const PORT = 3000;
 
+const CONNECTION_ERROR = "MongoDB Connection error.";
+const CONNECTION_MESSAGE = "Connecting to MongoDB...";
+
 const ERROR_UNAUTHORIZED = { code: 401, message: "jwt malformed" };
 const ERROR_BAD_REQUEST = { code: 400, message: "Invalid entries. Try again." };
 const ERROR_ONLY_ADMIN = { code: 403, message: "Only admins can register new admins." };
@@ -20,4 +23,6 @@ module.exports = {
     EMAIL_REGEX,
     ERROR_ONLY_ADMIN,
     ERROR_ALL_FIELDS,
+    CONNECTION_ERROR,
+    CONNECTION_MESSAGE,
 };

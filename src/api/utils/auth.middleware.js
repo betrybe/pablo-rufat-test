@@ -1,4 +1,4 @@
-const { ERROR_UNAUTHORIZED, JWT_SECRET } = require("../config/constants");
+const { ERROR_UNAUTHORIZED, JWT_SECRET } = require("./constants");
 const jwt = require("jsonwebtoken");
 
 const authJWT = (req, res, next) => {

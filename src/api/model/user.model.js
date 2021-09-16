@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
-import { Roles } from "../utils/interfaces.js";
+const mongoose = require("mongoose");
+const { Roles } = require("../utils/interfaces");
 
-const UserSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -16,12 +16,10 @@ const UserSchema = new mongoose.Schema({
         required: true,
     },
     role: {
-        type: Roles,
+        type: String,
         required: true,
         default: Roles.USER,
     },
 })
 
-const User = mongoose.model('users', UserSchema)
-
-export default User;
+module.exports = mongoose.model('users', userSchema);
