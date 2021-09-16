@@ -1,5 +1,6 @@
-const app = require('./app');
+import app from "./app";
+import { PORT } from "./config/constants";
 
-const PORT = 3000;
+const port = PORT || 3000;
 
-app.listen(PORT, () => console.log(`conectado na porta ${PORT}`));
+app.listen(port, () => console.log(`conectado na porta ${port}`));
