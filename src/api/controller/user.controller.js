@@ -1,4 +1,4 @@
-const { EMAIL_REGEX, ERROR_BAD_REQUEST, ERROR_ONLY_ADMIN } = require("../utils/constants");
+const { EMAIL_REGEX, ERROR_BAD_REQUEST, ERROR_ONLY_ADMIN, ERROR_ALL_FIELDS, ERROR_INVALID_LOGIN } = require("../utils/constants");
 const { UserService } = require("../service/index");
 const { Roles } = require("../utils/interfaces");
 
@@ -35,7 +35,7 @@ const signUpAdmin = async (req, res, next) => {
     if (
         !validateField(payload.name) ||
         !validateField(payload.email) ||
-        !validateField(paylolad.password) ||
+        !validateField(payload.password) ||
         !validateEmail(payload.email)
     ) {
         return res.status(ERROR_BAD_REQUEST.code).json({ message: ERROR_BAD_REQUEST.message });
@@ -55,15 +55,18 @@ const signIn = async (req, res, next) => {
 
     if (
         !validateField(payload.email) ||
-        !validateField(paylolad.password) ||
-        !validateEmail(payload.email)
+        !validateField(payload.password)
     ) {
         return res.status(ERROR_ALL_FIELDS.code).json({ message: ERROR_ALL_FIELDS.message });
     }
 
+    if (!validateEmail(payload.email)) {
+        return res.status(ERROR_INVALID_LOGIN.code).json({ message: ERROR_INVALID_LOGIN.message });
+    }
+
     try {
         const response = await UserService.signIn(payload);
-        return res.status(200).json(response);
+        return res.status(200).json({ token: response });
     } catch (e) {
         return res.status(e.status).json({ message: e.message });
     }

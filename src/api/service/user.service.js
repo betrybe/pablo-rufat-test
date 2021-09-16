@@ -1,6 +1,7 @@
 const { Roles } = require("../utils/interfaces");
 const { User } = require("../model");
-const { ERROR_MONGOOSE_DUPLICATE_KEY, ERROR_DUPLICATE_KEY } = require("../utils/constants");
+const { ERROR_MONGOOSE_DUPLICATE_KEY, ERROR_DUPLICATE_KEY, ERROR_INVALID_LOGIN, JWT_SECRET } = require("../utils/constants");
+const jwt = require("jsonwebtoken");
 
 const signUp = async (payload, role = Roles.USER) => {
     try {
@@ -28,8 +29,26 @@ const signUp = async (payload, role = Roles.USER) => {
     }
 }
 
-const signIn = (payload) => {
+const signIn = async (payload) => {
+    try {
+        const user = await User.findOne({ email: payload.email });
 
+        if (!user || user.password !== payload.password) {
+            let error = new Error(ERROR_INVALID_LOGIN.message);
+            error.status = ERROR_INVALID_LOGIN.code;
+            throw error;
+        }
+
+        return jwt.sign({ id: user._id, email: user.email,  role: user.role }, JWT_SECRET);
+
+    } catch (e) {
+        if (e.status !== ERROR_INVALID_LOGIN.code) {
+            let error = new Error(e);
+            error.status = 500;
+            throw error;
+        }
+        throw e;
+    }
 }
 
 module.exports = {

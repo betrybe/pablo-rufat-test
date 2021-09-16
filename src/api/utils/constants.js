@@ -10,7 +10,8 @@ const ERROR_UNAUTHORIZED = { code: 401, message: "jwt malformed" };
 const ERROR_BAD_REQUEST = { code: 400, message: "Invalid entries. Try again." };
 const ERROR_ONLY_ADMIN = { code: 403, message: "Only admins can register new admins." };
 const ERROR_ALL_FIELDS = { code: 401, message: "All fields must be filed." };
-const ERROR_DUPLICATE_KEY = { code: 409, message: "Email already registered." }
+const ERROR_DUPLICATE_KEY = { code: 409, message: "Email already registered." };
+const ERROR_INVALID_LOGIN = { code: 401, message: "Incorrect username or password." };
 
 const ERROR_MONGOOSE_DUPLICATE_KEY = 11000;
 
@@ -30,4 +31,5 @@ module.exports = {
     CONNECTION_MESSAGE,
     ERROR_MONGOOSE_DUPLICATE_KEY,
     ERROR_DUPLICATE_KEY,
+    ERROR_INVALID_LOGIN,
 };
