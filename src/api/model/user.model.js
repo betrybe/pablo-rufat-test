@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Roles } from "../utils/interfaces";
+import { Roles } from "../utils/interfaces.js";
 
 const UserSchema = new mongoose.Schema({
     name: {

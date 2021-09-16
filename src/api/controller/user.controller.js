@@ -1,7 +1,7 @@
-import { EMAIL_REGEX, ERROR_BAD_REQUEST } from "../config/constants";
-import { UserService } from "../services";
+const { EMAIL_REGEX, ERROR_BAD_REQUEST } = require("../config/constants");
+const { UserService } = require("../service/index");
 
-export const signUp = async (req, res, next) => {
+const signUp = async (req, res, next) => {
 
     const payload = req.body;
 
@@ -22,11 +22,11 @@ export const signUp = async (req, res, next) => {
     }
 };
 
-export const signUpAdmin = async (req, res, next) => {
+const signUpAdmin = async (req, res, next) => {
     return res.status(201).json({});
 };
 
-export const signIn = async (req, res, next) => {
+const signIn = async (req, res, next) => {
     return res.status(200).json({});
 };
 
@@ -38,3 +38,9 @@ const validateEmail = (email) => {
     const regex = EMAIL_REGEX;
     return regex.test(String(email).toLowerCase());
 }
+
+module.exports = {
+    signUp,
+    signUpAdmin,
+    signIn,
+};

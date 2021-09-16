@@ -1,4 +1,4 @@
-import * as UserController from "./user.controller";
-import * as RecipeController from "./recipe.controller";
+const UserController = require("./user.controller");
+const RecipeController = require("./recipe.controller");
 
-export { UserController, RecipeController };
+module.exports = { UserController, RecipeController };

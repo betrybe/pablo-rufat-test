@@ -1,4 +1,4 @@
-import User from "./user.model";
-import Recipe from "./recipe.model";
+const User = require("./user.model");
+const Recipe = require("./recipe.model");
 
-export { User, Recipe };
+module.exports = { User, Recipe };

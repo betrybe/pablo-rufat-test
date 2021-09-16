@@ -1,7 +1,7 @@
-import { ERROR_UNAUTHORIZED, JWT_SECRET } from "../config/constants";
-import * as jwt from "jsonwebtoken";
+const { ERROR_UNAUTHORIZED, JWT_SECRET } = require("../config/constants");
+const jwt = require("jsonwebtoken");
 
-export default authJWT = (req, res, next) => {
+const authJWT = (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (authHeader) {
@@ -19,3 +19,5 @@ export default authJWT = (req, res, next) => {
         return res.status(401).json({ message: ERROR_UNAUTHORIZED });
     }
 };
+
+module.exports = { authJWT };

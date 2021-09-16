@@ -1,4 +1,4 @@
-import * as userRouter from "./user.routes";
-import * as recipeRouter from "./recipe.routes";
+const userRouter = require("./user.routes");
+const recipeRouter = require("./recipe.routes");
 
-export { userRouter, recipeRouter };
+module.exports = { userRouter, recipeRouter };

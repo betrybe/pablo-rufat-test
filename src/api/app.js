@@ -1,6 +1,7 @@
-import * as express from "express";
-import { userRouter, recipeRouter } from "./route";
-import { UserController } from "./controller";
+const express = require("express");
+const { userRouter, recipeRouter } = require("./route");
+const { UserController } = require("./controller");
+const path = require('path');
 
 const app = express();
 
@@ -13,5 +14,6 @@ app.get('/', (request, response) => {
 app.use("/users", userRouter);
 app.use("/recipes", recipeRouter);
 app.post("/login", UserController.signIn);
+app.use('/images', express.static(path.join(__dirname, '..', 'uploads')));
 
-export default app;
+module.exports = app;

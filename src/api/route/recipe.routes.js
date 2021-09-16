@@ -1,13 +1,14 @@
-import * as express from "express";
-import { RecipeController } from "../controller";
+const express = require("express");
+const { RecipeController } = require("../controller/index");
+const { authJWT } = require("../utils/auth.middleware");
 
 const router = express.Router();
 
-router.post("/", RecipeController.addRecipe);
+router.post("/", authJWT, RecipeController.addRecipe);
 router.get("/", RecipeController.listRecipes);
-router.put("/:id", RecipeController.updateRecipe);
-router.delete("/:id", RecipeController.deleteRecipe);
-router.put("/:id/image/", RecipeController.addImage);
-// TODO: GET IMAGE BY NAME
+router.get("/:id", RecipeController.getRecipe);
+router.put("/:id", authJWT, RecipeController.updateRecipe);
+router.delete("/:id", authJWT, RecipeController.deleteRecipe);
+router.put("/:id/image/", authJWT, RecipeController.addImage);
 
-export default router;
+module.exports = router;
