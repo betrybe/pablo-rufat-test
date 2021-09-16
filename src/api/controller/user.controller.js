@@ -9,7 +9,7 @@ const signUp = async (req, res, next) => {
     if (
         !validateField(payload.name) ||
         !validateField(payload.email) ||
-        !validateField(paylolad.password) ||
+        !validateField(payload.password) ||
         !validateEmail(payload.email)
     ) {
         return res.status(ERROR_BAD_REQUEST.code).json({ message: ERROR_BAD_REQUEST.message });
@@ -17,7 +17,7 @@ const signUp = async (req, res, next) => {
 
     try {
         const response = await UserService.signUp(payload);
-        return res.status(201).json(response);
+        return res.status(201).json({ user: response });
     } catch (e) {
         return res.status(e.status).json({ message: e.message });
     }
