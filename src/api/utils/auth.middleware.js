@@ -9,14 +9,14 @@ const authJWT = (req, res, next) => {
 
         jwt.verify(token, JWT_SECRET, (err, user) => {
             if (err) {
-                return res.status(401).json({ message: ERROR_UNAUTHORIZED });
+                return res.status(ERROR_UNAUTHORIZED.code).json({ message: ERROR_UNAUTHORIZED.message });
             }
 
             req.user = user;
             next();
         });
     } else {
-        return res.status(401).json({ message: ERROR_UNAUTHORIZED });
+        return res.status(ERROR_UNAUTHORIZED.code).json({ message: ERROR_UNAUTHORIZED.message });
     }
 };
 
