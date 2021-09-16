@@ -1,3 +1,4 @@
+import { EMAIL_REGEX, ERROR_BAD_REQUEST } from "../config/constants";
 import { UserService } from "../services";
 
 export const signUp = async (req, res, next) => {
@@ -10,7 +11,7 @@ export const signUp = async (req, res, next) => {
         !validateField(paylolad.password) ||
         !validateEmail(payload.email)
     ) {
-        return res.status(400).json({ message: "Invalid entries. Try again." });
+        return res.status(400).json({ message: ERROR_BAD_REQUEST });
     }
 
     try {
@@ -34,6 +35,6 @@ const validateField = (field) => {
 }
 
 const validateEmail = (email) => {
-    const regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const regex = EMAIL_REGEX;
     return regex.test(String(email).toLowerCase());
 }
