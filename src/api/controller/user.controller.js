@@ -1,18 +1,22 @@
-const { ERROR_BAD_REQUEST, ERROR_ONLY_ADMIN, ERROR_ALL_FIELDS, ERROR_INVALID_LOGIN } = require("../utils/constants");
-const { UserService } = require("../service/index");
-const { Roles } = require("../utils/interfaces");
-const { validateField, validateEmail } = require("../utils/validations");
-const { handleError } = require("../utils/errorHandler");
+const {
+    ERROR_BAD_REQUEST,
+    ERROR_ONLY_ADMIN,
+    ERROR_ALL_FIELDS,
+    ERROR_INVALID_LOGIN,
+} = require('../utils/constants');
+const { UserService } = require('../service/index');
+const { Roles } = require('../utils/interfaces');
+const { validateField, validateEmail } = require('../utils/validations');
+const { handleError } = require('../utils/errorHandler');
 
 const signUp = async (req, res, next) => {
-
     const payload = req.body;
 
     if (
-        !validateField(payload.name) ||
-        !validateField(payload.email) ||
-        !validateField(payload.password) ||
-        !validateEmail(payload.email)
+        !validateField(payload.name)
+        || !validateField(payload.email)
+        || !validateField(payload.password)
+        || !validateEmail(payload.email)
     ) {
         next(handleError(ERROR_BAD_REQUEST));
         return;
@@ -27,9 +31,8 @@ const signUp = async (req, res, next) => {
 };
 
 const signUpAdmin = async (req, res, next) => {
-    
     const payload = req.body;
-    const authUser = req.authUser;
+    const { authUser } = req;
 
     if (!authUser || authUser.role !== Roles.ADMIN) {
         next(handleError(ERROR_ONLY_ADMIN));
@@ -37,10 +40,10 @@ const signUpAdmin = async (req, res, next) => {
     }
 
     if (
-        !validateField(payload.name) ||
-        !validateField(payload.email) ||
-        !validateField(payload.password) ||
-        !validateEmail(payload.email)
+        !validateField(payload.name)
+        || !validateField(payload.email)
+        || !validateField(payload.password)
+        || !validateEmail(payload.email)
     ) {
         next(handleError(ERROR_BAD_REQUEST));
         return;
@@ -48,19 +51,18 @@ const signUpAdmin = async (req, res, next) => {
 
     try {
         const response = await UserService.signUp(payload, Roles.ADMIN);
-        return res.status(201).json(response);
+        return res.status(201).json({ user: response });
     } catch (e) {
         next(e);
     }
 };
 
 const signIn = async (req, res, next) => {
-
     const payload = req.body;
 
     if (
-        !validateField(payload.email) ||
-        !validateField(payload.password)
+        !validateField(payload.email)
+        || !validateField(payload.password)
     ) {
         next(handleError(ERROR_ALL_FIELDS));
         return;

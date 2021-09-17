@@ -1,21 +1,21 @@
-const MONGO_DB_URL = "mongodb://localhost:27017/Cookmaster";
-const DB_NAME = "Cookmaster";
-const JWT_SECRET = "The_Ultra_Secret_1991";
+const MONGO_DB_URL = 'mongodb://localhost:27017/Cookmaster';
+const DB_NAME = 'Cookmaster';
+const JWT_SECRET = 'The_Ultra_Secret_1991';
 const PORT = 3000;
 
-const CONNECTION_ERROR = "MongoDB Connection error.";
-const CONNECTION_MESSAGE = "Connecting to MongoDB...";
+const CONNECTION_ERROR = 'MongoDB Connection error.';
+const CONNECTION_MESSAGE = 'Connecting to MongoDB...';
 
-const ERROR_UNAUTHORIZED = { code: 401, message: "jwt malformed" };
-const ERROR_BAD_REQUEST = { code: 400, message: "Invalid entries. Try again." };
-const ERROR_ONLY_ADMIN = { code: 403, message: "Only admins can register new admins." };
-const ERROR_ALL_FIELDS = { code: 401, message: "All fields must be filed." };
-const ERROR_DUPLICATE_KEY = { code: 409, message: "Email already registered." };
-const ERROR_INVALID_LOGIN = { code: 401, message: "Incorrect username or password." };
-const ERROR_INTERNAL = { code: 500, message: "Internal error" };
-const ERROR_RECIPE_NOT_FOUND = { code: 404, message: "recipe not found" };
-const ERROR_MISSING_TOKEN = { code: 401, message: "missing auth token" };
-const ERROR_FORBIDEN = { code: 401, message: "action forbiden for this user" };
+const ERROR_UNAUTHORIZED = { code: 401, message: 'jwt malformed' };
+const ERROR_BAD_REQUEST = { code: 400, message: 'Invalid entries. Try again.' };
+const ERROR_ONLY_ADMIN = { code: 403, message: 'Only admins can register new admins' };
+const ERROR_ALL_FIELDS = { code: 401, message: 'All fields must be filled' };
+const ERROR_DUPLICATE_KEY = { code: 409, message: 'Email already registered' };
+const ERROR_INVALID_LOGIN = { code: 401, message: 'Incorrect username or password' };
+const ERROR_INTERNAL = { code: 500, message: 'Internal error' };
+const ERROR_RECIPE_NOT_FOUND = { code: 404, message: 'recipe not found' };
+const ERROR_MISSING_TOKEN = { code: 401, message: 'missing auth token' };
+const ERROR_FORBIDEN = { code: 401, message: 'action forbiden for this user' };
 
 const ERROR_MONGOOSE_DUPLICATE_KEY = 11000;
 

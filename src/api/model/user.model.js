@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const { Roles } = require("../utils/interfaces");
+const mongoose = require('mongoose');
+const { Roles } = require('../utils/interfaces');
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -20,6 +20,6 @@ const userSchema = new mongoose.Schema({
         required: true,
         default: Roles.USER,
     },
-})
+});
 
 module.exports = mongoose.model('users', userSchema);

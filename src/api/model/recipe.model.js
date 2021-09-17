@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const recipeSchema = new mongoose.Schema({
     name: {
@@ -18,7 +18,8 @@ const recipeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    imageURL: String,
-})
+    // Foi alterado o nome do campo de 'imageURL' para 'image' para se ajustar aos testes automatizados.
+    image: String,
+});
 
 module.exports = mongoose.model('recipes', recipeSchema);
