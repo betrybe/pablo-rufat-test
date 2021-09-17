@@ -14,6 +14,8 @@ const ERROR_DUPLICATE_KEY = { code: 409, message: "Email already registered." };
 const ERROR_INVALID_LOGIN = { code: 401, message: "Incorrect username or password." };
 const ERROR_INTERNAL = { code: 500, message: "Internal error" };
 const ERROR_RECIPE_NOT_FOUND = { code: 404, message: "recipe not found" };
+const ERROR_MISSING_TOKEN = { code: 401, message: "missing auth token" };
+const ERROR_FORBIDEN = { code: 401, message: "action forbiden for this user" };
 
 const ERROR_MONGOOSE_DUPLICATE_KEY = 11000;
 
@@ -36,4 +38,6 @@ module.exports = {
     ERROR_INVALID_LOGIN,
     ERROR_INTERNAL,
     ERROR_RECIPE_NOT_FOUND,
+    ERROR_MISSING_TOKEN,
+    ERROR_FORBIDEN,
 };

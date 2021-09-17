@@ -52,7 +52,22 @@ const getRecipe = async (req, res, next) => {
 };
 
 const updateRecipe = async (req, res, next) => {
-    return res.status(201).json({});
+
+    const recipeId = req.params.id;
+    const payload = req.body;
+    const authUser = req.body.authUser;
+
+    if (!validateId(recipeId)){
+        next(handleError(ERROR_BAD_REQUEST));
+        return;
+    }
+
+    try {
+        const response = await RecipeService.updateRecipe(recipeId, payload, authUser);
+        return res.status(200).json(response);
+    } catch (e) {
+        next(e);
+    }
 };
 
 const deleteRecipe = async (req, res, next) => {

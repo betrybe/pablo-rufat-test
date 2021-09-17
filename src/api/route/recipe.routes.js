@@ -9,6 +9,6 @@ router.get("/", RecipeController.listRecipes);
 router.get("/:id", RecipeController.getRecipe);
 router.put("/:id", [authJWT], RecipeController.updateRecipe);
 router.delete("/:id", [authJWT], RecipeController.deleteRecipe);
-router.put("/:id/image/", [authJWT], RecipeController.addImage);
+router.patch("/:id/image/", [authJWT], RecipeController.addImage);
 
 module.exports = router;

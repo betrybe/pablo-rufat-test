@@ -1,6 +1,8 @@
 const { Recipe } = require("../model");
-const { ERROR_INTERNAL, ERROR_RECIPE_NOT_FOUND } = require("../utils/constants");
+const { ERROR_INTERNAL, ERROR_RECIPE_NOT_FOUND, ERROR_FORBIDEN } = require("../utils/constants");
 const { handleError } = require("../utils/errorHandler");
+const { Roles } = require("../utils/interfaces");
+const { validateField } = require("../utils/validations");
 
 const addRecipe = async (payload, authUser) => {
 
@@ -67,4 +69,39 @@ const getRecipe = async (recipeId) => {
     }
 };
 
-module.exports = { addRecipe, listRecipes, getRecipe };
+const updateRecipe = async (recipeId, payload, authUser) => {
+    try {
+
+        const recipe = await Recipe.findById(recipeId);
+
+        if (!recipe) {
+            throw handleError(ERROR_RECIPE_NOT_FOUND);
+        }
+
+        if (recipe.userId !== authUser.id && authUser.role !== Roles.ADMIN) {
+            throw handleError(ERROR_FORBIDEN);
+        }
+
+        if (validateField(payload.name)) recipe.name = payload.name;
+        if (validateField(payload.ingredients)) recipe.ingredients = payload.ingredients;
+        if (validateField(payload.preparation)) recipe.preparation = payload.preparation;
+
+        const updatedRecipe = await Recipe.updateOne({ _id: recipeId }, recipe);
+
+        return {
+            _id: recipe._id,
+            name: recipe.name,
+            ingredients: recipe.ingredients,
+            preparation: recipe.preparation,
+            userId: recipe.userId,
+        };
+        
+    } catch (e) {
+        if (e.status !== ERROR_RECIPE_NOT_FOUND.code && e.status !== ERROR_FORBIDEN) {
+            throw handleError(ERROR_INTERNAL);
+        }
+        throw e;
+    }    
+};
+
+module.exports = { addRecipe, listRecipes, getRecipe, updateRecipe };
