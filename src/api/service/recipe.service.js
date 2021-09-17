@@ -1,6 +1,11 @@
+const { Recipe } = require("../model");
+const { ERROR_INTERNAL } = require("../utils/constants");
+const { handleError } = require("../utils/errorHandler");
+
 const addRecipe = async (payload, authUser) => {
+
     try {
-        const newRecipe = await User.create({
+        const newRecipe = await Recipe.create({
             ...payload,
             userId: authUser.id,
             imageURL: null
@@ -15,9 +20,7 @@ const addRecipe = async (payload, authUser) => {
         };
 
     } catch (e) {
-        let error = new Error(e);
-        error.status = 500;
-        throw error;
+        throw handleError(ERROR_INTERNAL);
     }
 }
 

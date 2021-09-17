@@ -21,7 +21,7 @@ const signUp = async (req, res, next) => {
         const response = await UserService.signUp(payload);
         return res.status(201).json({ user: response });
     } catch (e) {
-        next(handleError(e));
+        next(e);
     }
 };
 
@@ -70,7 +70,7 @@ const signIn = async (req, res, next) => {
         const response = await UserService.signIn(payload);
         return res.status(200).json({ token: response });
     } catch (e) {
-        next(handleError(e));
+        next(e);
     }
 };
 

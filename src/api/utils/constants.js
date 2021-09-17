@@ -12,6 +12,7 @@ const ERROR_ONLY_ADMIN = { code: 403, message: "Only admins can register new adm
 const ERROR_ALL_FIELDS = { code: 401, message: "All fields must be filed." };
 const ERROR_DUPLICATE_KEY = { code: 409, message: "Email already registered." };
 const ERROR_INVALID_LOGIN = { code: 401, message: "Incorrect username or password." };
+const ERROR_INTERNAL = { code: 500, message: "Internal error" };
 
 const ERROR_MONGOOSE_DUPLICATE_KEY = 11000;
 
@@ -32,4 +33,5 @@ module.exports = {
     ERROR_MONGOOSE_DUPLICATE_KEY,
     ERROR_DUPLICATE_KEY,
     ERROR_INVALID_LOGIN,
+    ERROR_INTERNAL,
 };
