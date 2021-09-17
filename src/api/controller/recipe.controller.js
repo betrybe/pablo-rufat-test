@@ -1,12 +1,13 @@
 const { RecipeService } = require("../service/index");
-const { ERROR_BAD_REQUEST, ERROR_INTERNAL } = require("../utils/constants");
+const { ERROR_BAD_REQUEST } = require("../utils/constants");
 const { handleError } = require("../utils/errorHandler");
+const { removeInvalidImage } = require("../utils/files.utils");
 const { validateField, validateId } = require("../utils/validations");
 
 const addRecipe = async (req, res, next) => {
 
     const payload = req.body;
-    const authUser = req.body.authUser;
+    const authUser = req.authUser;
 
     if (
         !validateField(payload.name) ||
@@ -55,7 +56,7 @@ const updateRecipe = async (req, res, next) => {
 
     const recipeId = req.params.id;
     const payload = req.body;
-    const authUser = req.body.authUser;
+    const authUser = req.authUser;
 
     if (!validateId(recipeId)){
         next(handleError(ERROR_BAD_REQUEST));
@@ -73,7 +74,7 @@ const updateRecipe = async (req, res, next) => {
 const deleteRecipe = async (req, res, next) => {
 
     const recipeId = req.params.id;
-    const authUser = req.body.authUser;
+    const authUser = req.authUser;
 
     if (!validateId(recipeId)){
         next(handleError(ERROR_BAD_REQUEST));
@@ -81,7 +82,7 @@ const deleteRecipe = async (req, res, next) => {
     }
 
     try {
-        const response = await RecipeService.deleteRecipe(recipeId, authUser);
+        await RecipeService.deleteRecipe(recipeId, authUser);
         return res.status(204).send();
     } catch (e) {
         next(e);
@@ -89,7 +90,24 @@ const deleteRecipe = async (req, res, next) => {
 };
 
 const addImage = async (req, res, next) => {
-    return res.status(201).json({});
+
+    const recipeId = req.params.id;
+    const authUser = req.authUser;
+
+
+    if (!validateId(recipeId)){
+        removeInvalidImage();
+        next(handleError(ERROR_BAD_REQUEST));
+        return;
+    }
+
+    try {
+        const response = await RecipeService.addImage(recipeId, authUser);
+        return res.status(200).json(response);
+    } catch (e) {
+        removeInvalidImage(recipeId);
+        next(e);
+    }
 };
 
 module.exports = {

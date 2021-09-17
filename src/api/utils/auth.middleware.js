@@ -16,7 +16,7 @@ const authJWT = (req, res, next) => {
             next(handleError(ERROR_UNAUTHORIZED));
         }
         
-        req.body.authUser = user;
+        req.authUser = user;
         next();
     });
 };

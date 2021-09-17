@@ -1,6 +1,7 @@
 const { Recipe } = require("../model");
 const { ERROR_INTERNAL, ERROR_RECIPE_NOT_FOUND, ERROR_FORBIDEN } = require("../utils/constants");
 const { handleError } = require("../utils/errorHandler");
+const { buildURL } = require("../utils/files.utils");
 const { Roles } = require("../utils/interfaces");
 const { validateField } = require("../utils/validations");
 
@@ -86,7 +87,7 @@ const updateRecipe = async (recipeId, payload, authUser) => {
         if (validateField(payload.ingredients)) recipe.ingredients = payload.ingredients;
         if (validateField(payload.preparation)) recipe.preparation = payload.preparation;
 
-        const updatedRecipe = await Recipe.updateOne({ _id: recipeId }, recipe);
+        await Recipe.updateOne({ _id: recipeId }, recipe);
 
         return {
             _id: recipe._id,
@@ -127,10 +128,45 @@ const deleteRecipe = async (recipeId, authUser) => {
     }
 };
 
+const addImage = async (recipeId, authUser) => {
+
+    try {
+        const recipe = await Recipe.findById(recipeId);
+
+        if (!recipe) {
+            throw handleError(ERROR_RECIPE_NOT_FOUND);
+        }
+
+        if (recipe.userId !== authUser.id && authUser.role !== Roles.ADMIN) {
+            console.log("ERRO AQUI");
+            throw handleError(ERROR_FORBIDEN);
+        }
+
+        const imageURL = buildURL(recipeId);
+
+        await Recipe.updateOne({ _id: recipeId }, { imageURL });
+
+        return {
+            _id: recipe._id,
+            name: recipe.name,
+            ingredients: recipe.ingredients,
+            preparation: recipe.preparation,
+            userId: recipe.userId,
+            imageURL
+        };
+    } catch(e) {
+        if (e.status !== ERROR_RECIPE_NOT_FOUND.code && e.status !== ERROR_FORBIDEN.code) {
+            throw handleError({code: 500, message: e});
+        }
+        throw e;
+    }
+};
+
 module.exports = {
     addRecipe,
     listRecipes,
     getRecipe,
     updateRecipe,
-    deleteRecipe
+    deleteRecipe,
+    addImage
 };

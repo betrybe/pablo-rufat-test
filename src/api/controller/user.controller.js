@@ -29,7 +29,7 @@ const signUp = async (req, res, next) => {
 const signUpAdmin = async (req, res, next) => {
     
     const payload = req.body;
-    const authUser = req.body.authUser;
+    const authUser = req.authUser;
 
     if (!authUser || authUser.role !== Roles.ADMIN) {
         next(handleError(ERROR_ONLY_ADMIN));
