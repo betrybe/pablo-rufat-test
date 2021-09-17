@@ -15,6 +15,7 @@ const signUp = async (req, res, next) => {
         !validateEmail(payload.email)
     ) {
         next(handleError(ERROR_BAD_REQUEST));
+        return;
     }
 
     try {
@@ -32,6 +33,7 @@ const signUpAdmin = async (req, res, next) => {
 
     if (!authUser || authUser.role !== Roles.ADMIN) {
         next(handleError(ERROR_ONLY_ADMIN));
+        return;
     }
 
     if (
@@ -41,13 +43,14 @@ const signUpAdmin = async (req, res, next) => {
         !validateEmail(payload.email)
     ) {
         next(handleError(ERROR_BAD_REQUEST));
+        return;
     }
 
     try {
         const response = await UserService.signUp(payload, Roles.ADMIN);
         return res.status(201).json(response);
     } catch (e) {
-        next(handleError(e));
+        next(e);
     }
 };
 
@@ -60,10 +63,12 @@ const signIn = async (req, res, next) => {
         !validateField(payload.password)
     ) {
         next(handleError(ERROR_ALL_FIELDS));
+        return;
     }
 
     if (!validateEmail(payload.email)) {
         next(handleError(ERROR_INVALID_LOGIN));
+        return;
     }
 
     try {
