@@ -14,6 +14,11 @@ const recipeSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    userid: {
+        type: String,
+        required: true,
+    },
+    imageURL: String,
 })
 
 module.exports = mongoose.model('recipes', recipeSchema);

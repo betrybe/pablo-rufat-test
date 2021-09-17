@@ -1,6 +1,8 @@
-const { EMAIL_REGEX, ERROR_BAD_REQUEST, ERROR_ONLY_ADMIN, ERROR_ALL_FIELDS, ERROR_INVALID_LOGIN } = require("../utils/constants");
+const { ERROR_BAD_REQUEST, ERROR_ONLY_ADMIN, ERROR_ALL_FIELDS, ERROR_INVALID_LOGIN } = require("../utils/constants");
 const { UserService } = require("../service/index");
 const { Roles } = require("../utils/interfaces");
+const { validateField, validateEmail } = require("../utils/validations");
+const { handleError } = require("../utils/errorHandler");
 
 const signUp = async (req, res, next) => {
 
@@ -12,24 +14,24 @@ const signUp = async (req, res, next) => {
         !validateField(payload.password) ||
         !validateEmail(payload.email)
     ) {
-        return res.status(ERROR_BAD_REQUEST.code).json({ message: ERROR_BAD_REQUEST.message });
+        next(handleError(ERROR_BAD_REQUEST));
     }
 
     try {
         const response = await UserService.signUp(payload);
         return res.status(201).json({ user: response });
     } catch (e) {
-        return res.status(e.status).json({ message: e.message });
+        next(handleError(e));
     }
 };
 
 const signUpAdmin = async (req, res, next) => {
     
     const payload = req.body;
-    const authUser = req.user;
+    const authUser = req.body.authUser;
 
     if (!authUser || authUser.role !== Roles.ADMIN) {
-        return res.status(ERROR_ONLY_ADMIN.code).json({ message: ERROR_ONLY_ADMIN.message });
+        next(handleError(ERROR_ONLY_ADMIN));
     }
 
     if (
@@ -38,14 +40,14 @@ const signUpAdmin = async (req, res, next) => {
         !validateField(payload.password) ||
         !validateEmail(payload.email)
     ) {
-        return res.status(ERROR_BAD_REQUEST.code).json({ message: ERROR_BAD_REQUEST.message });
+        next(handleError(ERROR_BAD_REQUEST));
     }
 
     try {
         const response = await UserService.signUp(payload, Roles.ADMIN);
         return res.status(201).json(response);
     } catch (e) {
-        return res.status(e.status).json({ message: e.message });
+        next(handleError(e));
     }
 };
 
@@ -57,29 +59,20 @@ const signIn = async (req, res, next) => {
         !validateField(payload.email) ||
         !validateField(payload.password)
     ) {
-        return res.status(ERROR_ALL_FIELDS.code).json({ message: ERROR_ALL_FIELDS.message });
+        next(handleError(ERROR_ALL_FIELDS));
     }
 
     if (!validateEmail(payload.email)) {
-        return res.status(ERROR_INVALID_LOGIN.code).json({ message: ERROR_INVALID_LOGIN.message });
+        next(handleError(ERROR_INVALID_LOGIN));
     }
 
     try {
         const response = await UserService.signIn(payload);
         return res.status(200).json({ token: response });
     } catch (e) {
-        return res.status(e.status).json({ message: e.message });
+        next(handleError(e));
     }
 };
-
-const validateField = (field) => {
-    return field && typeof field === "string" && field.trim() !== "";
-}
-
-const validateEmail = (email) => {
-    const regex = EMAIL_REGEX;
-    return regex.test(String(email).toLowerCase());
-}
 
 module.exports = {
     signUp,
