@@ -71,7 +71,21 @@ const updateRecipe = async (req, res, next) => {
 };
 
 const deleteRecipe = async (req, res, next) => {
-    return res.status(201).json({});
+
+    const recipeId = req.params.id;
+    const authUser = req.body.authUser;
+
+    if (!validateId(recipeId)){
+        next(handleError(ERROR_BAD_REQUEST));
+        return;
+    }
+
+    try {
+        const response = await RecipeService.deleteRecipe(recipeId, authUser);
+        return res.status(204).send();
+    } catch (e) {
+        next(e);
+    }
 };
 
 const addImage = async (req, res, next) => {

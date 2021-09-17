@@ -104,4 +104,33 @@ const updateRecipe = async (recipeId, payload, authUser) => {
     }    
 };
 
-module.exports = { addRecipe, listRecipes, getRecipe, updateRecipe };
+const deleteRecipe = async (recipeId, authUser) => {
+
+    try {
+        const recipe = await Recipe.findById(recipeId);
+
+        if (!recipe) {
+            throw handleError(ERROR_RECIPE_NOT_FOUND);
+        }
+
+        if (recipe.userId !== authUser.id && authUser.role !== Roles.ADMIN) {
+            console.log("ERRO AQUI");
+            throw handleError(ERROR_FORBIDEN);
+        }
+
+        await Recipe.deleteOne({ _id: recipeId });
+    } catch(e) {
+        if (e.status !== ERROR_RECIPE_NOT_FOUND.code && e.status !== ERROR_FORBIDEN.code) {
+            throw handleError(ERROR_INTERNAL);
+        }
+        throw e;
+    }
+};
+
+module.exports = {
+    addRecipe,
+    listRecipes,
+    getRecipe,
+    updateRecipe,
+    deleteRecipe
+};
