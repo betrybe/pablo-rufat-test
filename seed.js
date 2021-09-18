@@ -11,6 +11,9 @@ const insertAdminUser = async () => {
 
     try {
         // A query foi alterada para se ajustar aos testes automatizados.
+        // Essa sintaxe não funciona corretamente ao executar o script com "node ./sedd.js"
+        // Para um correto funcionamento deve ser definido primeiro a collection "const collection = db.collection('users')"
+        // e depois usar "collection.insertOne()"
         await db.users.insertOne({ name: 'admin', email: 'root@email.com', password: 'admin', role: 'admin' });
 
         console.log('DONE');
