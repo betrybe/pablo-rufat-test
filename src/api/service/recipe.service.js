@@ -95,7 +95,7 @@ const updateRecipe = async (recipeId, payload, authUser) => {
             userId: recipe.userId,
         };
     } catch (e) {
-        if (e.status !== ERROR_RECIPE_NOT_FOUND.code && e.status !== ERROR_FORBIDEN) {
+        if (e.status !== ERROR_RECIPE_NOT_FOUND.code && e.status !== ERROR_FORBIDEN.code) {
             throw handleError(ERROR_INTERNAL);
         }
         throw e;
