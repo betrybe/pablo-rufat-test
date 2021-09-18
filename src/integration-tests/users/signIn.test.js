@@ -3,10 +3,11 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 const app = require('../../api/app');
 const { CONNECTION_ERROR, MONGO_DB_URL} = require('../../api/utils/constants');
-const { User } = require("../../api/model");
+const { User } = require('../../api/model');
 
 chai.use(chaiHttp);
 const expect = chai.expect;
+const request = chai.request;
 
 describe('SignIn Endpoint tests.', () => {
   before(async () => {
@@ -16,7 +17,7 @@ describe('SignIn Endpoint tests.', () => {
         process.exit(1);
     });
 
-    await chai.request(app)
+    await request(app)
     .post('/users')
     .send({
         name: "name",
@@ -26,11 +27,12 @@ describe('SignIn Endpoint tests.', () => {
   });
 
   after(async () => {
+    await User.deleteMany();
     await mongoose.disconnect();
   });
 
   it('Should return error 401 when field email is missing', async () => {
-    chai.request(app)
+    request(app)
     .post('/login')
     .send({
         password: "1234567890",
@@ -45,7 +47,7 @@ describe('SignIn Endpoint tests.', () => {
   });
 
   it('Should return error 401 when field email is invalid', async () => {
-    chai.request(app)
+    request(app)
     .post('/login')
     .send({
         email: "test3",
@@ -61,7 +63,7 @@ describe('SignIn Endpoint tests.', () => {
   });
 
   it('Should return error 401 when field password is missing', async () => {
-    chai.request(app)
+    request(app)
     .post('/login')
     .send({
         email: "test3@test.com",
@@ -76,7 +78,7 @@ describe('SignIn Endpoint tests.', () => {
   });
 
   it('Should return error 401 when field password is invalid', async () => {
-    chai.request(app)
+    request(app)
     .post('/login')
     .send({
         email: "test3@test.com",
@@ -92,7 +94,7 @@ describe('SignIn Endpoint tests.', () => {
   });
 
   it('Should return 200 and the field token must be returned', async () => {
-    chai.request(app)
+    request(app)
     .post('/login')
     .send({
         email: "test3@test.com",

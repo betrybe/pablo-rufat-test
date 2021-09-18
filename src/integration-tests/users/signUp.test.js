@@ -8,6 +8,7 @@ const { Roles } = require('../../api/utils/interfaces');
 
 chai.use(chaiHttp);
 const expect = chai.expect;
+const request = chai.request;
 
 describe('SignUp Endpoint tests.', () => {
     before(async () => {
@@ -23,11 +24,12 @@ describe('SignUp Endpoint tests.', () => {
     });
 
     after(async () => {
+        await User.deleteMany();
         await mongoose.disconnect();
     });
 
     it('Should return error 400 when field name is missing', async () => {
-        chai.request(app)
+        request(app)
         .post('/users')
         .send({
             email: "test3@test.com",
@@ -43,7 +45,7 @@ describe('SignUp Endpoint tests.', () => {
     });
 
     it('Should return error 400 when field email is missing', async () => {
-        chai.request(app)
+        request(app)
         .post('/users')
         .send({
             name: "name",
@@ -59,7 +61,7 @@ describe('SignUp Endpoint tests.', () => {
     });
 
     it('Should return error 400 when field email is invalid', async () => {
-        chai.request(app)
+        request(app)
         .post('/users')
         .send({
             name: "name",
@@ -76,7 +78,7 @@ describe('SignUp Endpoint tests.', () => {
     });
 
     it('Should return error 400 when field password is missing', async () => {
-        chai.request(app)
+        request(app)
         .post('/users')
         .send({
             name: "name",
@@ -92,7 +94,7 @@ describe('SignUp Endpoint tests.', () => {
     });
 
     it('Should return error 409 when email already exists', async () => {
-        await chai.request(app)
+        await request(app)
         .post('/users')
         .send({
             name: "name",
@@ -100,7 +102,7 @@ describe('SignUp Endpoint tests.', () => {
             password: "1234567890"
         });
 
-        chai.request(app)
+        request(app)
         .post('/users')
         .send({
             name: "name",
@@ -117,7 +119,7 @@ describe('SignUp Endpoint tests.', () => {
     });
 
     it('Should return 201 and the field role value must be "user"', async () => {
-        chai.request(app)
+        request(app)
         .post('/users')
         .send({
             name: "name",
