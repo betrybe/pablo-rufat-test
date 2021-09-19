@@ -5,7 +5,6 @@ const chaiHttp = require('chai-http');
 const app = require('../../api/app');
 const { CONNECTION_ERROR, MONGO_DB_URL} = require('../../api/utils/constants');
 const { User } = require("../../api/model");
-const { exec } = require('child_process');
 
 chai.use(chaiHttp);
 const expect = chai.expect;

@@ -149,7 +149,7 @@ const addImage = async (recipeId, authUser) => {
         };
     } catch (e) {
         if (e.status !== ERROR_RECIPE_NOT_FOUND.code && e.status !== ERROR_FORBIDEN.code) {
-            throw handleError({ code: 500, message: e });
+            throw handleError(ERROR_INTERNAL);
         }
         throw e;
     }

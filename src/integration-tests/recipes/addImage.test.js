@@ -74,7 +74,9 @@ describe('DeleteRecipe Endpoint tests.', () => {
   });
 
   after(async () => {
-    fs.unlinkSync(newImagePath);
+    try {
+      fs.unlinkSync(newImagePath);
+    } catch (e) {}
     await User.deleteMany();
     await Recipe.deleteMany();
     await mongoose.disconnect();
@@ -115,6 +117,21 @@ describe('DeleteRecipe Endpoint tests.', () => {
         }
 
         expect(res).to.have.status(401);
+    });
+  });
+
+  it('Should return error 400 when the recipeId has wrong format', async () => {
+    request(app)
+    .put(`/recipes/123/image`)
+    .attach('image', image)
+    .set('Content-Type','image/jpeg')
+    .set('Authorization', token)
+    .end(function(err, res) {
+        if (err) {
+            console.error(err);
+        }
+
+        expect(res).to.have.status(400);
     });
   });
 

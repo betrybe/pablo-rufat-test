@@ -110,6 +110,19 @@ describe('DeleteRecipe Endpoint tests.', () => {
     });
   });
 
+  it('Should return error 400 when the recipeId has wrong format', async () => {
+    request(app)
+    .delete(`/recipes/123`)
+    .set('Authorization', token)
+    .end(function(err, res) {
+        if (err) {
+            console.error(err);
+        }
+
+        expect(res).to.have.status(400);
+    });
+  });
+
   it('Should return 204', async () => {
     request(app)
     .delete(`/recipes/${recipe._id}`)

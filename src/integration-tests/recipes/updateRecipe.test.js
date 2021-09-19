@@ -124,6 +124,24 @@ describe('UpdateRecipe Endpoint tests.', () => {
     });
   });
 
+  it('Should return error 400 when the recipeId has wrong format', async () => {
+    request(app)
+    .put(`/recipes/123`)
+    .set('Authorization', token)
+    .send({
+        name: "name updated",
+        ingredients: "ingredients updated",
+        preparation: "preparation updated",
+    })
+    .end(function(err, res) {
+        if (err) {
+            console.error(err);
+        }
+
+        expect(res).to.have.status(400);
+    });
+  });
+
   it('Should return 200 and fields name, integration, preparation must be present and updated', async () => {
     request(app)
     .put(`/recipes/${recipe._id}`)
