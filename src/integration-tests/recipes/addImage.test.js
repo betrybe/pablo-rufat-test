@@ -18,6 +18,8 @@ let adminToken;
 let recipe;
 
 const imagePath = path.resolve(__dirname, '../../uploads/ratinho.jpg')
+const image = fs.createReadStream(imagePath);
+let newImagePath;
 
 describe('DeleteRecipe Endpoint tests.', () => {
   before(async () => {
@@ -68,9 +70,11 @@ describe('DeleteRecipe Endpoint tests.', () => {
     });
 
     recipe = addRecipeResponse.body.recipe;
+    newImagePath = path.resolve(__dirname, `../../uploads/${recipe._id}.jpeg`);
   });
 
   after(async () => {
+    fs.unlinkSync(newImagePath);
     await User.deleteMany();
     await Recipe.deleteMany();
     await mongoose.disconnect();
@@ -115,10 +119,9 @@ describe('DeleteRecipe Endpoint tests.', () => {
   });
 
   it('Should return 200. Field image must be present and its value is equal to the recipes id', async () => {
-
     request(app)
     .put(`/recipes/${recipe._id}/image`)
-    .attach('image', fs.readFileSync(imagePath))
+    .attach('image', image)
     .set('Content-Type','image/jpeg')
     .set('Authorization', token)
     .end(function(err, res) {
@@ -133,7 +136,7 @@ describe('DeleteRecipe Endpoint tests.', () => {
   it('Should call endpoint whith admin user. Should return 200', async () => {
     request(app)
     .put(`/recipes/${recipe._id}/image`)
-    .attach('image', fs.readFileSync(imagePath))
+    .attach('image', image)
     .set('Content-Type','image/jpeg')
     .set('Authorization', adminToken)
     .end(function(err, res) {
