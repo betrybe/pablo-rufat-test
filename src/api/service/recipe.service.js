@@ -129,13 +129,16 @@ const addImage = async (recipeId, authUser) => {
         await Recipe.updateOne({ _id: recipeId }, { image });
 
         return {
-            ...recipe,
+            _id: recipe._id,
+            name: recipe.name,
+            ingredients: recipe.ingredients,
+            preparation: recipe.preparation,
+            userId: recipe.userId,
             image,
         };
     } catch (e) {
-        if (unknownError(e.status)) {
-            throw handleError(ERROR_INTERNAL);
-        }
+        if (unknownError(e.status)) throw handleError(ERROR_INTERNAL);
+        
         throw e;
     }
 };
