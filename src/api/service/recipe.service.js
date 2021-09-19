@@ -1,9 +1,16 @@
 const { Recipe } = require('../model');
-const { ERROR_INTERNAL, ERROR_RECIPE_NOT_FOUND, ERROR_FORBIDEN } = require('../utils/constants');
+const {
+    ERROR_INTERNAL,
+    ERROR_RECIPE_NOT_FOUND,
+    ERROR_FORBIDEN,
+    unknownError,
+} = require('../utils/constants');
 const { handleError } = require('../utils/errorHandler');
 const { buildURL } = require('../utils/files.utils');
 const { Roles } = require('../utils/interfaces');
-const { validateField } = require('../utils/validations');
+
+const hasPermission = (authUser, recipe) =>
+    recipe.userId === authUser.id || authUser.role === Roles.ADMIN;
 
 const addRecipe = async (payload, authUser) => {
     try {
@@ -73,29 +80,19 @@ const updateRecipe = async (recipeId, payload, authUser) => {
     try {
         const recipe = await Recipe.findById(recipeId);
 
-        if (!recipe) {
-            throw handleError(ERROR_RECIPE_NOT_FOUND);
-        }
+        if (!recipe) throw handleError(ERROR_RECIPE_NOT_FOUND);
 
-        if (recipe.userId !== authUser.id && authUser.role !== Roles.ADMIN) {
-            throw handleError(ERROR_FORBIDEN);
-        }
-
-        if (validateField(payload.name)) recipe.name = payload.name;
-        if (validateField(payload.ingredients)) recipe.ingredients = payload.ingredients;
-        if (validateField(payload.preparation)) recipe.preparation = payload.preparation;
+        if (!hasPermission(authUser, recipe)) throw handleError(ERROR_FORBIDEN);
 
         await Recipe.updateOne({ _id: recipeId }, recipe);
 
         return {
             _id: recipe._id,
-            name: recipe.name,
-            ingredients: recipe.ingredients,
-            preparation: recipe.preparation,
+            ...payload,
             userId: recipe.userId,
         };
     } catch (e) {
-        if (e.status !== ERROR_RECIPE_NOT_FOUND.code && e.status !== ERROR_FORBIDEN.code) {
+        if (unknownError(e.status)) {
             throw handleError(ERROR_INTERNAL);
         }
         throw e;
@@ -106,17 +103,13 @@ const deleteRecipe = async (recipeId, authUser) => {
     try {
         const recipe = await Recipe.findById(recipeId);
 
-        if (!recipe) {
-            throw handleError(ERROR_RECIPE_NOT_FOUND);
-        }
+        if (!recipe) throw handleError(ERROR_RECIPE_NOT_FOUND);
 
-        if (recipe.userId !== authUser.id && authUser.role !== Roles.ADMIN) {
-            throw handleError(ERROR_FORBIDEN);
-        }
+        if (!hasPermission(authUser, recipe)) throw handleError(ERROR_FORBIDEN);
 
         await Recipe.deleteOne({ _id: recipeId });
     } catch (e) {
-        if (e.status !== ERROR_RECIPE_NOT_FOUND.code && e.status !== ERROR_FORBIDEN.code) {
+        if (unknownError(e.status)) {
             throw handleError(ERROR_INTERNAL);
         }
         throw e;
@@ -127,28 +120,20 @@ const addImage = async (recipeId, authUser) => {
     try {
         const recipe = await Recipe.findById(recipeId);
 
-        if (!recipe) {
-            throw handleError(ERROR_RECIPE_NOT_FOUND);
-        }
+        if (!recipe) throw handleError(ERROR_RECIPE_NOT_FOUND);
 
-        if (recipe.userId !== authUser.id && authUser.role !== Roles.ADMIN) {
-            throw handleError(ERROR_FORBIDEN);
-        }
+        if (!hasPermission(authUser, recipe)) throw handleError(ERROR_FORBIDEN);
 
         const image = buildURL(recipeId);
 
         await Recipe.updateOne({ _id: recipeId }, { image });
 
         return {
-            _id: recipe._id,
-            name: recipe.name,
-            ingredients: recipe.ingredients,
-            preparation: recipe.preparation,
-            userId: recipe.userId,
+            ...recipe,
             image,
         };
     } catch (e) {
-        if (e.status !== ERROR_RECIPE_NOT_FOUND.code && e.status !== ERROR_FORBIDEN.code) {
+        if (unknownError(e.status)) {
             throw handleError(ERROR_INTERNAL);
         }
         throw e;

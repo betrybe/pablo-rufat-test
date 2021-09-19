@@ -21,6 +21,18 @@ const ERROR_MONGOOSE_DUPLICATE_KEY = 11000;
 
 const EMAIL_REGEX = /(.+)@(.+){2,}\.(.+){2,}/;
 
+const unknownError = (status) => ![
+        ERROR_UNAUTHORIZED.code,
+        ERROR_BAD_REQUEST.code,
+        ERROR_ONLY_ADMIN.code,
+        ERROR_ALL_FIELDS.code,
+        ERROR_DUPLICATE_KEY.code,
+        ERROR_INVALID_LOGIN.code,
+        ERROR_RECIPE_NOT_FOUND.code,
+        ERROR_MISSING_TOKEN.code,
+        ERROR_FORBIDEN.code,
+    ].includes(status);
+
 module.exports = {
     MONGO_DB_URL,
     DB_NAME,
@@ -40,4 +52,5 @@ module.exports = {
     ERROR_RECIPE_NOT_FOUND,
     ERROR_MISSING_TOKEN,
     ERROR_FORBIDEN,
+    unknownError,
 };
