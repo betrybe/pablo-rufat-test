@@ -19,7 +19,7 @@ const ERROR_FORBIDEN = { code: 401, message: 'action forbiden for this user' };
 
 const ERROR_MONGOOSE_DUPLICATE_KEY = 11000;
 
-const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const EMAIL_REGEX = /(.+)@(.+){2,}\.(.+){2,}/;
 
 module.exports = {
     MONGO_DB_URL,

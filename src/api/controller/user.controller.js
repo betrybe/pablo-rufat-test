@@ -9,14 +9,16 @@ const { Roles } = require('../utils/interfaces');
 const { validateField, validateEmail } = require('../utils/validations');
 const { handleError } = require('../utils/errorHandler');
 
+const validatePayload = (payload) => validateField(payload.name)
+        && validateField(payload.email)
+        && validateField(payload.password)
+        && validateEmail(payload.email);
+
 const signUp = async (req, res, next) => {
     const payload = req.body;
 
     if (
-        !validateField(payload.name)
-        || !validateField(payload.email)
-        || !validateField(payload.password)
-        || !validateEmail(payload.email)
+        !validatePayload(payload)
     ) {
         next(handleError(ERROR_BAD_REQUEST));
         return;
@@ -40,10 +42,7 @@ const signUpAdmin = async (req, res, next) => {
     }
 
     if (
-        !validateField(payload.name)
-        || !validateField(payload.email)
-        || !validateField(payload.password)
-        || !validateEmail(payload.email)
+        !validatePayload(payload)
     ) {
         next(handleError(ERROR_BAD_REQUEST));
         return;
