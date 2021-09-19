@@ -10,6 +10,7 @@ const expect = chai.expect;
 const request = chai.request;
 
 let token;
+let user;
 let wrongToken;
 let adminToken;
 let recipe;
@@ -22,7 +23,7 @@ describe('DeleteRecipe Endpoint tests.', () => {
         process.exit(1);
     });
 
-    await User.create({ name: "name", email: "test3@test.com", password: "1234567890" });
+    user = await User.create({ name: "name", email: "test3@test.com", password: "1234567890" });
     await User.create({ name: "name 4", email: "test4@test.com", password: "1234567890" });
     await User.create({ name: "admin", email: "admin@test.com", password: "1234567890", role: 'admin' });
 
@@ -123,19 +124,11 @@ describe('DeleteRecipe Endpoint tests.', () => {
   });
 
   it('Should call endpoint whith admin user. Should return 204', async () => {
-    const addRecipeResponse = await request(app)
-     .post('/recipes')
-     .set('Authorization', token)
-     .send({
-         name: "name",
-         ingredients: "ingredients",
-         preparation: "preparation",
-     });
- 
-     recipe = addRecipeResponse.body.recipe;
+    
+    newRecipe = await Recipe.create({ name: "new name", ingredients: "ingredients", preparation: "preparations", userId: user._id, image: null });
 
      request(app)
-     .delete(`/recipes/${recipe._id}`)
+     .delete(`/recipes/${newRecipe._id}`)
      .set('Authorization', adminToken)
      .end(function(err, res) {
          if (err) {

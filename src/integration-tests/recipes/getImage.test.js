@@ -55,15 +55,10 @@ describe('GetImage Endpoint tests.', () => {
   });
 
   it('Should return 200 and image must exists', async () => {
-    request(app)
-    .get(`/images/${recipe._id}.jpeg`)
-    .end((err, res) => {
-      if (err) {
-          console.error(err);
-      }
+    const res = await request(app)
+    .get(`/images/${recipe._id}.jpeg`);
 
-      expect(fs.existsSync(newImagePath)).to.be.true;
-      expect(res).to.have.status(200);
-    });
+    expect(fs.existsSync(newImagePath)).to.be.true;
+    expect(res).to.have.status(200);
   });
 });
